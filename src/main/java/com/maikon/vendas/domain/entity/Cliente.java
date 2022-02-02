@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "cliente") // Só é necessário se o nome da tabela for diferente do nome da classe.
 public class Cliente {
@@ -23,12 +25,15 @@ public class Cliente {
 	@Column(name = "nome", length = 100) // Só é necessário se o nome da coluna for diferente do nome id.
 	private String nome;
 
+	@Column(name = "cpf", length = 11)
+	private String cpf;
+
+	@JsonIgnore
 	@OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY) // Um Cliente para muitos pedidos.
 	private Set<Pedido> pedidos;
 
 	public Cliente() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Cliente(Integer id, String nome) {
@@ -63,6 +68,14 @@ public class Cliente {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 
 	@Override
