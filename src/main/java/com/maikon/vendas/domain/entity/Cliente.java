@@ -1,23 +1,30 @@
 package com.maikon.vendas.domain.entity;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "cliente") //Só é necessário se o nome da tabela for diferente do nome da classe.
+@Table(name = "cliente") // Só é necessário se o nome da tabela for diferente do nome da classe.
 public class Cliente {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column (name = "id") //Só é necessário se o nome da coluna for diferente do nome id.
+	@Column(name = "id") // Só é necessário se o nome da coluna for diferente do nome id.
 	private Integer id;
-	
-	@Column (name = "nome", length = 100) //Só é necessário se o nome da coluna for diferente do nome id.
+
+	@Column(name = "nome", length = 100) // Só é necessário se o nome da coluna for diferente do nome id.
 	private String nome;
+
+	@OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY) // Um Cliente para muitos pedidos.
+	private Set<Pedido> pedidos;
 
 	public Cliente() {
 		super();
@@ -33,7 +40,7 @@ public class Cliente {
 	public Cliente(String nome) {
 		this.nome = nome;
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -48,6 +55,14 @@ public class Cliente {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public Set<Pedido> getPedidos() {
+		return pedidos;
+	}
+
+	public void setPedidos(Set<Pedido> pedidos) {
+		this.pedidos = pedidos;
 	}
 
 	@Override
