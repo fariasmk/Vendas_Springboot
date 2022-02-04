@@ -2,6 +2,7 @@ package com.maikon.vendas.service.impl;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -11,10 +12,12 @@ import com.maikon.vendas.domain.entity.Cliente;
 import com.maikon.vendas.domain.entity.ItemPedido;
 import com.maikon.vendas.domain.entity.Pedido;
 import com.maikon.vendas.domain.entity.Produto;
+import com.maikon.vendas.domain.enuns.StatusPedido;
 import com.maikon.vendas.domain.repository.ClientesRepository;
 import com.maikon.vendas.domain.repository.ItensPedidoRepository;
 import com.maikon.vendas.domain.repository.PedidosRepository;
 import com.maikon.vendas.domain.repository.ProdutosRepository;
+import com.maikon.vendas.exception.PedidoNaoEncontradoException;
 import com.maikon.vendas.exception.RegraNegocioException;
 import com.maikon.vendas.rest.dto.ItemPedidoDTO;
 import com.maikon.vendas.rest.dto.PedidoDTO;
@@ -32,6 +35,7 @@ public class PedidoServiceImpl implements PedidoService {
     private final ProdutosRepository produtosRepository;
     private final ItensPedidoRepository itensPedidoRepository;
 
+
     @Override
     @Transactional
     public Pedido salvar( PedidoDTO dto ) {
@@ -44,12 +48,29 @@ public class PedidoServiceImpl implements PedidoService {
         pedido.setTotal(dto.getTotal());
         pedido.setDataPedido(LocalDate.now());
         pedido.setCliente(cliente);
+        pedido.setStatus(StatusPedido.REALIZADO);
 
-        List<ItemPedido> itensPedido = converterItens(pedido, dto.getItens());
+        List<ItemPedido> itemsPedido = converterItens(pedido, dto.getItens());
         repository.save(pedido);
-        itensPedidoRepository.saveAll(itensPedido);
-        pedido.setItens(itensPedido);
+        itensPedidoRepository.saveAll(itemsPedido);
+        pedido.setItens(itemsPedido);
         return pedido;
+    }
+    
+    @Override
+    public Optional<Pedido> obterPedidoCompleto(Integer id) {
+        return repository.findByIdFetchItens(id);
+    }
+
+    @Override
+    @Transactional
+    public void atualizaStatus( Integer id, StatusPedido statusPedido ) {
+        repository
+                .findById(id)
+                .map( pedido -> {
+                    pedido.setStatus(statusPedido);
+                    return repository.save(pedido);
+                }).orElseThrow(() -> new PedidoNaoEncontradoException() );
     }
 
     private List<ItemPedido> converterItens(Pedido pedido, List<ItemPedidoDTO> itens){
@@ -76,4 +97,5 @@ public class PedidoServiceImpl implements PedidoService {
                 }).collect(Collectors.toList());
 
     }
+
 }

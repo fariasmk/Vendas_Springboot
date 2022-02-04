@@ -4,15 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+import com.maikon.vendas.domain.enuns.StatusPedido;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,6 +34,10 @@ public class Pedido {
 	@Column(name = "total", precision = 20, scale = 2) // precision = 20 -> Qtde Caracteres / scale = 2 -> Casas
 														// decimais
 	private BigDecimal total;
+	
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private StatusPedido status;
 
 	@OneToMany(mappedBy = "pedido") // Um pedido para muitos itens_pedido.
 	private List<ItemPedido> itens;
