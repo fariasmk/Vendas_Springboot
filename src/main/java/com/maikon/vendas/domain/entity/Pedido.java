@@ -14,6 +14,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data //Substitui getters, setters e demais métodos
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "pedido") // Só é necessário se o nome da tabela for diferente do nome da classe.
 public class Pedido {
@@ -30,60 +37,11 @@ public class Pedido {
 	@Column(name = "data_pedido") // Só é necessário se o nome da coluna for diferente da variável.
 	private LocalDate dataPedido;
 
-    @Column(name = "total", precision = 20, scale = 2) //precision = 20 -> Qtde Caracteres / scale = 2 -> Casas decimais
-    private BigDecimal total;
+	@Column(name = "total", precision = 20, scale = 2) // precision = 20 -> Qtde Caracteres / scale = 2 -> Casas
+														// decimais
+	private BigDecimal total;
 
 	@OneToMany(mappedBy = "pedido") // Um pedido para muitos itens_pedido.
 	private List<ItemPedido> itens;
-
-	public Pedido() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
-
-	public LocalDate getDataPedido() {
-		return dataPedido;
-	}
-
-	public void setDataPedido(LocalDate dataPedido) {
-		this.dataPedido = dataPedido;
-	}
-
-	public BigDecimal getTotal() {
-		return total;
-	}
-
-	public void setTotal(BigDecimal total) {
-		this.total = total;
-	}
-
-	public List<ItemPedido> getItens() {
-		return itens;
-	}
-
-	public void setItens(List<ItemPedido> itens) {
-		this.itens = itens;
-	}
-
-	@Override
-	public String toString() {
-		return "Pedido [id=" + id + ", dataPedido=" + dataPedido + ", total=" + total + "]";
-	}
 
 }

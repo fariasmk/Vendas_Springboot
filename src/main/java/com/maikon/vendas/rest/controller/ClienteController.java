@@ -25,7 +25,7 @@ public class ClienteController {
 
 	private ClientesRepository clientes;
 
-	public ClienteController(ClientesRepository clientes) {
+	public ClienteController(ClientesRepository clientes) { 
 		this.clientes = clientes;
 	}
 

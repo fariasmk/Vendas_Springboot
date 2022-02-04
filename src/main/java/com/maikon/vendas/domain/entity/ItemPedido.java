@@ -9,6 +9,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "item_pedido") // Só é necessário se o nome da tabela for diferente do nome da classe.
 public class ItemPedido {
@@ -28,42 +35,5 @@ public class ItemPedido {
 
 	@Column // Só é necessário se o nome da coluna for diferente da variável.
 	private Integer Quantidade;
-
-	public ItemPedido() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Pedido getPedido() {
-		return pedido;
-	}
-
-	public void setPedido(Pedido pedido) {
-		this.pedido = pedido;
-	}
-
-	public Produto getProduto() {
-		return produto;
-	}
-
-	public void setProduto(Produto produto) {
-		this.produto = produto;
-	}
-
-	public Integer getQuantidade() {
-		return Quantidade;
-	}
-
-	public void setQuantidade(Integer quantidade) {
-		Quantidade = quantidade;
-	}
 
 }

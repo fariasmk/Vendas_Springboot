@@ -1,5 +1,8 @@
 package com.maikon.vendas.service;
 
-public interface PedidoService {
+import com.maikon.vendas.domain.entity.Pedido;
+import com.maikon.vendas.rest.dto.PedidoDTO;
 
+public interface PedidoService {
+	Pedido salvar(PedidoDTO dto);
 }

@@ -61,13 +61,12 @@ public class ProdutoController {
 				.orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Produto não encontrado."));
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping
 	public List<Produto> find(Produto filtro) {
 		ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreCase()
 				.withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 
-		@SuppressWarnings("rawtypes")
 		Example example = Example.of(filtro, matcher);
 		return repository.findAll(example);
 	}
