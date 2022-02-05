@@ -2,6 +2,8 @@ package com.maikon.vendas.rest.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
@@ -25,7 +27,7 @@ public class ClienteController {
 
 	private ClientesRepository clientes;
 
-	public ClienteController(ClientesRepository clientes) { 
+	public ClienteController(ClientesRepository clientes) {
 		this.clientes = clientes;
 	}
 
@@ -37,7 +39,7 @@ public class ClienteController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED) // Código 201
-	public Cliente save(@RequestBody Cliente cliente) {
+	public Cliente save(@RequestBody @Valid Cliente cliente) {
 		return clientes.save(cliente);
 	}
 
@@ -53,7 +55,7 @@ public class ClienteController {
 
 	@PutMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT) // Código 204
-	public void update(@PathVariable Integer id, @RequestBody Cliente cliente) {
+	public void update(@PathVariable Integer id, @RequestBody @Valid Cliente cliente) {
 		clientes.findById(id).map(clienteExistente -> {
 			cliente.setId(clienteExistente.getId());
 			clientes.save(cliente);
@@ -63,14 +65,11 @@ public class ClienteController {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping
-    public List<Cliente> find( Cliente filtro ){
-        ExampleMatcher matcher = ExampleMatcher
-                                    .matching()
-                                    .withIgnoreCase()
-                                    .withStringMatcher(
-                                            ExampleMatcher.StringMatcher.CONTAINING );
+	public List<Cliente> find(Cliente filtro) {
+		ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreCase()
+				.withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 
-        Example example = Example.of(filtro, matcher);
-        return clientes.findAll(example);
-    }
+		Example example = Example.of(filtro, matcher);
+		return clientes.findAll(example);
+	}
 }
