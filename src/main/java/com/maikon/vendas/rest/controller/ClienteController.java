@@ -21,8 +21,15 @@ import org.springframework.web.server.ResponseStatusException;
 import com.maikon.vendas.domain.entity.Cliente;
 import com.maikon.vendas.domain.repository.ClientesRepository;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 @RequestMapping("/api/clientes")
+@Api("Aapi Clientes")
 public class ClienteController {
 
 	private ClientesRepository clientes;
@@ -32,13 +39,23 @@ public class ClienteController {
 	}
 
 	@GetMapping("{id}")
-	public Cliente getClienteById(@PathVariable Integer id) {
+	@ApiOperation("Obter Detalhes de um Cliente")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "Cliente encontrado"),
+		@ApiResponse(code = 404, message = "Cliente não encontrado para o ID informado")		
+	})
+	public Cliente getClienteById(@PathVariable @ApiParam("ID do Cliente") Integer id) {
 		return clientes.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED) // Código 201
+	@ApiOperation("Salva um novo Cliente")
+	@ApiResponses({
+		@ApiResponse(code = 201, message = "Cliente Salvo com sucesso"),
+		@ApiResponse(code = 400, message = "Erro de validação")		
+	})
 	public Cliente save(@RequestBody @Valid Cliente cliente) {
 		return clientes.save(cliente);
 	}
