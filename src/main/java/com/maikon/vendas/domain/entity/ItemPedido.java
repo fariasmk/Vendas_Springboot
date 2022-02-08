@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class ItemPedido {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id") // Só é necessário se o nome da coluna for diferente do nome id.
 	private Integer id;
 
